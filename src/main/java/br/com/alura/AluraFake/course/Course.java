@@ -70,6 +70,10 @@ public class Course {
         return publishedAt;
     }
 
+    public void setPublishedAt(LocalDateTime publishedAt) {
+        this.publishedAt = publishedAt;
+    }
+
     public List<Task> getTasks() {
         return tasks;
     }
