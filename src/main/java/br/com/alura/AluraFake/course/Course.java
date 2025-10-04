@@ -1,10 +1,13 @@
 package br.com.alura.AluraFake.course;
 
+import br.com.alura.AluraFake.task.domain.Task;
 import br.com.alura.AluraFake.user.User;
 import jakarta.persistence.*;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Course {
@@ -31,6 +34,9 @@ public class Course {
         this.description = description;
         this.status = Status.BUILDING;
     }
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<Task> tasks = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -62,5 +68,9 @@ public class Course {
 
     public LocalDateTime getPublishedAt() {
         return publishedAt;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
     }
 }

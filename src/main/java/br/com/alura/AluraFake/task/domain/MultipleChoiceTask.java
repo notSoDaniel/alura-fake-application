@@ -1,5 +1,6 @@
 package br.com.alura.AluraFake.task.domain;
 
+import br.com.alura.AluraFake.task.Type;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -24,5 +25,10 @@ public class MultipleChoiceTask extends Task {
 
     public void setOptions(List<Option> options) {
         this.options = options;
+    }
+
+    @Override
+    public Type getType(){
+        return Type.MULTIPLE_CHOICE;
     }
 }
