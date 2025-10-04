@@ -1,6 +1,7 @@
 package br.com.alura.AluraFake.task.domain;
 
 import br.com.alura.AluraFake.course.Course;
+import br.com.alura.AluraFake.task.Type;
 import jakarta.persistence.*;
 
 @Entity
@@ -59,4 +60,6 @@ public abstract class Task {
     public void setCourse(Course course) {
         this.course = course;
     }
+
+    public abstract Type getType();
 }
