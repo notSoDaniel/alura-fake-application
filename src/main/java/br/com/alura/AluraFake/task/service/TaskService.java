@@ -116,8 +116,6 @@ public class TaskService {
         if (distinctOptions.contains(dto.statement())) {
             throw new IllegalArgumentException("Options cannot be the same as the statement.");
         }
-        // ----------------------------------------------------
-
 
         SingleChoiceTask newTask = new SingleChoiceTask();
         newTask.setCourse(course);
