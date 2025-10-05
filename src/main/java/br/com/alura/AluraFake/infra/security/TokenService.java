@@ -1,8 +1,7 @@
 package br.com.alura.AluraFake.infra.security;
 
 import br.com.alura.AluraFake.user.User;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -33,5 +32,19 @@ public class TokenService {
                 .setExpiration(expirationDate)
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public String getSubject(String tokenJWT) {
+        try {
+            SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+            Jws<Claims> jwsClaims = Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(tokenJWT);
+
+            return jwsClaims.getPayload().getSubject();
+        } catch (JwtException e) {
+            throw new RuntimeException("Invalid or expired JWT token!");
+        }
     }
 }
