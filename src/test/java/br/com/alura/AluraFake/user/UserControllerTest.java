@@ -1,5 +1,6 @@
 package br.com.alura.AluraFake.user;
 
+import br.com.alura.AluraFake.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ class UserControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private UserService userService;
 
     @Test
     void newUser__should_return_bad_request_when_email_is_blank() throws Exception {
