@@ -1,6 +1,7 @@
 package br.com.alura.AluraFake.course;
 
 import br.com.alura.AluraFake.course.service.CourseService;
+import br.com.alura.AluraFake.infra.security.TokenService;
 import br.com.alura.AluraFake.user.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -8,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -27,11 +30,13 @@ class CourseControllerTest {
     private CourseRepository courseRepository;
     @Autowired
     private ObjectMapper objectMapper;
-
+    @MockBean
+    private TokenService tokenService;
     @MockBean
     private CourseService courseService;
 
     @Test
+    @WithMockUser(roles = "INSTRUCTOR")
     void newCourseDTO__should_return_bad_request_when_email_is_invalid() throws Exception {
 
         NewCourseDTO newCourseDTO = new NewCourseDTO();
@@ -43,6 +48,7 @@ class CourseControllerTest {
                 .findByEmail(newCourseDTO.getEmailInstructor());
 
         mockMvc.perform(post("/course/new")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newCourseDTO)))
                 .andExpect(status().isBadRequest())
@@ -52,6 +58,7 @@ class CourseControllerTest {
 
 
     @Test
+    @WithMockUser(roles = "INSTRUCTOR")
     void newCourseDTO__should_return_bad_request_when_email_is_no_instructor() throws Exception {
 
         NewCourseDTO newCourseDTO = new NewCourseDTO();
@@ -66,6 +73,7 @@ class CourseControllerTest {
                 .findByEmail(newCourseDTO.getEmailInstructor());
 
         mockMvc.perform(post("/course/new")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newCourseDTO)))
                 .andExpect(status().isBadRequest())
@@ -74,6 +82,7 @@ class CourseControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "INSTRUCTOR")
     void newCourseDTO__should_return_created_when_new_course_request_is_valid() throws Exception {
 
         NewCourseDTO newCourseDTO = new NewCourseDTO();
@@ -87,6 +96,7 @@ class CourseControllerTest {
         doReturn(Optional.of(user)).when(userRepository).findByEmail(newCourseDTO.getEmailInstructor());
 
         mockMvc.perform(post("/course/new")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newCourseDTO)))
                 .andExpect(status().isCreated());
@@ -95,6 +105,7 @@ class CourseControllerTest {
     }
 
     @Test
+    @WithMockUser
     void listAllCourses__should_list_all_courses() throws Exception {
         User paulo = new User("Paulo", "paulo@alua.com.br", Role.INSTRUCTOR);
 
