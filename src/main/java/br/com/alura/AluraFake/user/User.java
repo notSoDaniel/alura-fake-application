@@ -21,7 +21,6 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     private String email;
-    // Por questões didáticas, a senha será armazenada em texto plano.
     private String password;
 
     @Deprecated
@@ -91,5 +90,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
